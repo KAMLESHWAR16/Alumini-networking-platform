@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(true);
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -30,15 +31,15 @@ export default function Login() {
     }
 
     login({ name, email, role });
-    navigate('/');
+    navigate(role === 'admin' ? '/admin' : '/dashboard');
   };
 
   return (
     <div className="auth-wrapper">
-      <div className="card auth-card shadow">
+      <div className="card auth-card">
         <div className="card-body p-4">
-          <h4 className="text-center mb-1">Welcome back</h4>
-          <p className="text-center text-muted mb-4">Login to continue</p>
+          <h4 className="text-center mb-1">Welcome Back 👋</h4>
+          <p className="text-center muted mb-4">Login to continue</p>
 
           {error && <div className="alert alert-danger py-2">{error}</div>}
 
@@ -53,7 +54,7 @@ export default function Login() {
                 placeholder="you@example.com"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <label className="form-label">Password</label>
               <input
                 type="password"
@@ -63,13 +64,30 @@ export default function Login() {
                 placeholder="Enter password"
               />
             </div>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="remember"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                />
+                <label className="form-check-label" htmlFor="remember">
+                  Remember me
+                </label>
+              </div>
+              <Link to="/forgot-password" className="small">
+                Forgot Password?
+              </Link>
+            </div>
             <button type="submit" className="btn btn-primary w-100">
-              Login
+              LOGIN
             </button>
           </form>
 
           <p className="text-center mt-3 mb-0">
-            Don't have an account? <Link to="/register">Sign up</Link>
+            Don't have an account? <Link to="/register">Register</Link>
           </p>
         </div>
       </div>

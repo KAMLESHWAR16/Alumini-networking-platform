@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Plus } from 'lucide-react';
 import { opportunities } from '../data';
 import JobCard from '../components/JobCard';
 
+// Jobs and opportunities listing.
 export default function Jobs() {
   const [search, setSearch] = useState('');
   const [type, setType] = useState('All');
@@ -24,14 +27,22 @@ export default function Jobs() {
   });
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-1">Job & Internship Opportunities</h2>
-      <p className="text-muted">Find openings posted by alumni.</p>
+    <div>
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <h3 className="mb-0">Jobs & Opportunities</h3>
+          <p className="muted mb-0">Find openings posted by alumni.</p>
+        </div>
+        <Link to="/jobs/post" className="btn btn-primary">
+          <Plus size={16} className="me-1" /> Post Job
+        </Link>
+      </div>
 
       {message && <div className="alert alert-success py-2">{message}</div>}
 
-      <div className="row g-2 mb-4">
-        <div className="col-md-6">
+      {/* filters */}
+      <div className="row g-2 mb-3">
+        <div className="col-md-5">
           <input
             type="text"
             className="form-control"
@@ -54,7 +65,7 @@ export default function Jobs() {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-muted">No opportunities match your filters.</p>
+        <p className="muted">No opportunities match your filters.</p>
       ) : (
         filtered.map((job) => (
           <JobCard

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Card for a job or internship opportunity.
 export default function JobCard({ job, onApply, applied }) {
@@ -8,7 +9,7 @@ export default function JobCard({ job, onApply, applied }) {
         <div className="d-flex justify-content-between align-items-start">
           <div>
             <h6 className="card-title mb-1">{job.title}</h6>
-            <p className="mb-1 text-muted">
+            <p className="mb-1 muted">
               {job.company} &middot; {job.location}
             </p>
           </div>
@@ -22,17 +23,23 @@ export default function JobCard({ job, onApply, applied }) {
             </span>
           ))}
         </div>
-        <div className="d-flex justify-content-between align-items-center">
-          <small className="text-muted">
-            Posted by {job.postedBy} on {job.addedOn}
+        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <small className="muted">
+            Posted by Alumni {job.postedBy} on {job.addedOn} &middot;{' '}
+            {job.applications} applicants
           </small>
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => onApply && onApply(job)}
-            disabled={applied}
-          >
-            {applied ? 'Applied' : 'Apply'}
-          </button>
+          <div className="d-flex gap-2">
+            <Link to={`/jobs/${job.id}`} className="btn btn-outline-primary btn-sm">
+              View
+            </Link>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => onApply && onApply(job)}
+              disabled={applied}
+            >
+              {applied ? 'Applied' : 'Apply'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

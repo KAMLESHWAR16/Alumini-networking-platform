@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { users } from '../../data';
 
-// Admin page to manage all users and verify alumni.
+// Admin page to manage all users.
 export default function ManageUsers() {
   const [userList, setUserList] = useState(users);
   const [search, setSearch] = useState('');
@@ -26,26 +26,23 @@ export default function ManageUsers() {
   );
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-1">Manage Users</h2>
-      <p className="text-muted">Verify alumni and manage all platform users.</p>
+    <div>
+      <h3 className="mb-1">Manage Users</h3>
+      <p className="muted mb-3">All students and alumni on the platform.</p>
 
       {message && <div className="alert alert-success py-2">{message}</div>}
 
-      <div className="row mb-3">
-        <div className="col-md-5">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search users by name..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
+      <input
+        type="text"
+        className="form-control mb-3"
+        placeholder="Search users by name..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{ maxWidth: 320 }}
+      />
 
       <div className="table-responsive">
-        <table className="table table-striped align-middle">
+        <table className="table table-striped">
           <thead>
             <tr>
               <th>Name</th>
@@ -57,16 +54,19 @@ export default function ManageUsers() {
           <tbody>
             {filtered.map((u) => (
               <tr key={u.id}>
-                <td>{u.name}</td>
+                <td>
+                  <div className="d-flex align-items-center gap-2">
+                    <div className="avatar-circle avatar-sm">{u.name.charAt(0)}</div>
+                    {u.name}
+                  </div>
+                </td>
                 <td>
                   <span className="badge bg-info text-dark">{u.role}</span>
                 </td>
                 <td>
-                  {u.role === 'Alumni' && u.status !== 'Verified' ? (
-                    <span className="badge bg-warning text-dark">{u.status}</span>
-                  ) : (
-                    <span className="badge bg-success">{u.status}</span>
-                  )}
+                  <span className={'badge ' + (u.status === 'Verified' || u.status === 'Active' ? 'bg-success' : 'bg-warning text-dark')}>
+                    {u.status}
+                  </span>
                 </td>
                 <td className="text-end">
                   {u.role === 'Alumni' && u.status !== 'Verified' && (

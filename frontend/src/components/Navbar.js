@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Search, Bell, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+// Sticky top navigation bar shown on every page.
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -11,94 +13,54 @@ export default function Navbar() {
     navigate('/');
   };
 
+  const avatarLetter = user ? user.name.charAt(0) : '?';
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark app-navbar">
-      <div className="container">
-        <Link className="navbar-brand fw-bold" to="/">
-          AlumniConnect
+    <nav className="topbar">
+      <div className="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between">
+        <Link className="brand-name" to="/">
+          Alumni<span>Connect</span>
         </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mainNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
 
-        <div className="collapse navbar-collapse" id="mainNav">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/alumni">
-                Alumni
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/jobs">
-                Opportunities
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/events">
-                Events
-              </NavLink>
-            </li>
+        {user && (
+          <div className="d-none d-md-flex align-items-center search-box">
+            <Search size={16} className="me-2 muted" />
+            <input
+              type="text"
+              className="form-control form-control-sm border-0"
+              placeholder="Search alumni..."
+              style={{ width: 260, background: 'transparent' }}
+            />
+          </div>
+        )}
 
-            {user ? (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/connections">
-                    Connections
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/mentorship">
-                    Mentorship
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/notifications">
-                    Notifications
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/profile">
-                    Profile
-                  </NavLink>
-                </li>
-                {user.role === 'admin' && (
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/admin">
-                      Admin
-                    </NavLink>
-                  </li>
-                )}
-                <li className="nav-item">
-                  <span className="nav-link text-warning">
-                    Hi, {user.name.split(' ')[0]}
-                  </span>
-                </li>
-                <li className="nav-item">
-                  <button className="btn btn-outline-light btn-sm ms-2" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/login">
-                    Login
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <Link className="btn btn-warning btn-sm ms-2" to="/register">
-                    Sign Up
-                  </Link>
-                </li>
-              </>
-            )}
-          </ul>
+        <div className="d-flex align-items-center gap-3">
+          {user ? (
+            <>
+              <NavLink to="/notifications" className="muted">
+                <Bell size={20} />
+              </NavLink>
+              <NavLink to="/profile" className="muted">
+                <div className="avatar-circle avatar-sm">{avatarLetter}</div>
+              </NavLink>
+              <button
+                className="btn btn-outline-secondary btn-sm d-none d-sm-inline"
+                onClick={handleLogout}
+              >
+                <LogOut size={14} className="me-1" />
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className="muted">
+                Login
+              </NavLink>
+              <Link to="/register" className="btn btn-primary btn-sm">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

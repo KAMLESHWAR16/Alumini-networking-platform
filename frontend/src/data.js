@@ -12,6 +12,34 @@ export const departments = [
   'Business Administration',
 ];
 
+export const careerInterests = [
+  'Software Development',
+  'Data Science',
+  'Product Management',
+  'Mechanical Design',
+  'Electrical Engineering',
+  'Marketing',
+  'Finance',
+];
+
+export const industries = [
+  'IT Services',
+  'Software Product',
+  'Manufacturing',
+  'Automotive',
+  'Banking & Finance',
+  'Healthcare',
+  'Consulting',
+];
+
+// things alumni can help students with
+export const helpOptions = [
+  'Career Advice',
+  'Resume Review',
+  'Interview Preparation',
+  'Job Shadowing',
+];
+
 // sample alumni shown in the directory
 export const alumni = [
   {
@@ -25,7 +53,13 @@ export const alumni = [
     department: 'Computer Science',
     linkedin: '@kamleshwar',
     verified: true,
+    industry: 'IT Services',
+    experience: 5,
     skills: ['Java', 'React', 'Spring Boot', 'MySQL'],
+    about:
+      'Backend developer who enjoys building clean APIs and mentoring juniors. Happy to help with your career in software.',
+    helpWith: ['Career Advice', 'Resume Review', 'Interview Preparation', 'Job Shadowing'],
+    mentorshipAvailable: true,
   },
   {
     id: 2,
@@ -38,7 +72,13 @@ export const alumni = [
     department: 'Computer Science',
     linkedin: '@priyasharma',
     verified: true,
-    skills: ['Python', 'Machine Learning', 'SQL'],
+    industry: 'Software Product',
+    experience: 6,
+    skills: ['Python', 'Machine Learning', 'SQL', 'Statistics'],
+    about:
+      'Data scientist working on machine learning products. I love talking about data careers and interviewing.',
+    helpWith: ['Career Advice', 'Interview Preparation'],
+    mentorshipAvailable: true,
   },
   {
     id: 3,
@@ -51,7 +91,13 @@ export const alumni = [
     department: 'Mechanical',
     linkedin: '@arjunnair',
     verified: false,
+    industry: 'Automotive',
+    experience: 7,
     skills: ['CAD', 'SolidWorks', 'ANSYS'],
+    about:
+      'Mechanical design engineer in the automotive industry. Can guide you through mechanical careers.',
+    helpWith: ['Career Advice', 'Job Shadowing'],
+    mentorshipAvailable: true,
   },
   {
     id: 4,
@@ -64,7 +110,13 @@ export const alumni = [
     department: 'Business Administration',
     linkedin: '@snehak',
     verified: true,
-    skills: ['Product Strategy', 'Agile', 'Analytics'],
+    industry: 'Software Product',
+    experience: 8,
+    skills: ['Product Strategy', 'Agile', 'Analytics', 'Communication'],
+    about:
+      'Product manager excited about mentoring people who want to move into tech product roles.',
+    helpWith: ['Career Advice', 'Resume Review', 'Mock Interview'],
+    mentorshipAvailable: true,
   },
   {
     id: 5,
@@ -77,7 +129,13 @@ export const alumni = [
     department: 'Computer Science',
     linkedin: '@rahulverma',
     verified: true,
-    skills: ['JavaScript', 'React', 'CSS'],
+    industry: 'Software Product',
+    experience: 4,
+    skills: ['JavaScript', 'React', 'CSS', 'TypeScript'],
+    about:
+      'Frontend developer focused on user interfaces. Great with resume reviews and interview prep.',
+    helpWith: ['Resume Review', 'Interview Preparation'],
+    mentorshipAvailable: true,
   },
   {
     id: 6,
@@ -90,7 +148,13 @@ export const alumni = [
     department: 'Electrical',
     linkedin: '@divyamenon',
     verified: false,
+    industry: 'Manufacturing',
+    experience: 5,
     skills: ['PLC', 'SCADA', 'MATLAB'],
+    about:
+      'Electrical engineer working on industrial automation. Open to helping electrical students.',
+    helpWith: ['Career Advice', 'Job Shadowing'],
+    mentorshipAvailable: false,
   },
 ];
 
@@ -104,8 +168,11 @@ export const opportunities = [
     location: 'Hyderabad',
     postedBy: 'Kamleshwar Reddy',
     addedOn: '2026-08-20',
-    description: 'Looking for a motivated intern who knows Java and basic web development.',
+    experience: 'Fresher',
+    description:
+      'Looking for a motivated intern who knows Java and basic web development. Great learning environment with a real project to own.',
     skills: ['Java', 'React', 'MySQL'],
+    applications: 34,
   },
   {
     id: 2,
@@ -115,8 +182,11 @@ export const opportunities = [
     location: 'Bangalore',
     postedBy: 'Priya Sharma',
     addedOn: '2026-08-25',
-    description: 'Entry level role for graduates who enjoy working with data and reports.',
+    experience: '0-1 years',
+    description:
+      'Entry level role for graduates who enjoy working with data and building reports. Basic SQL and Python preferred.',
     skills: ['Python', 'Excel', 'SQL'],
+    applications: 58,
   },
   {
     id: 3,
@@ -126,8 +196,11 @@ export const opportunities = [
     location: 'Bangalore',
     postedBy: 'Rahul Verma',
     addedOn: '2026-08-28',
-    description: 'Good opportunity for someone who loves building clean user interfaces.',
+    experience: '1-3 years',
+    description:
+      'Good opportunity for someone who loves building clean user interfaces with React. Work with a small friendly team.',
     skills: ['JavaScript', 'React', 'CSS'],
+    applications: 41,
   },
   {
     id: 4,
@@ -137,8 +210,11 @@ export const opportunities = [
     location: 'Pune',
     postedBy: 'Arjun Nair',
     addedOn: '2026-08-18',
-    description: 'For mechanical students who want hands on experience in a plant environment.',
+    experience: 'Fresher',
+    description:
+      'For mechanical students who want hands on experience in a plant environment. Stipend and certification provided.',
     skills: ['CAD', 'Production'],
+    applications: 22,
   },
 ];
 
@@ -146,14 +222,16 @@ export const opportunities = [
 export const events = [
   {
     id: 1,
-    name: 'Alumni Meet 2026',
-    date: '2026-10-15',
-    time: '5:00 PM',
-    venue: 'Main Auditorium',
+    name: 'Alumni Networking Meetup',
+    date: '2026-09-15',
+    time: '10:00 AM',
+    venue: 'College Auditorium',
     type: 'Offline',
     organizer: 'Alumni Association',
-    about: 'Annual get together of old students and current students to network and share experiences.',
+    about:
+      'Annual get together of old students and current students to network, share experiences and grow your circle.',
     registered: 120,
+    capacity: 250,
   },
   {
     id: 2,
@@ -165,6 +243,7 @@ export const events = [
     organizer: 'Sneha Kulkarni',
     about: 'Learn how to write a good resume that gets shortlisted by recruiters.',
     registered: 85,
+    capacity: 200,
   },
   {
     id: 3,
@@ -176,6 +255,7 @@ export const events = [
     organizer: 'Priya Sharma',
     about: 'A talk on how artificial intelligence is being used in the industry today.',
     registered: 200,
+    capacity: 300,
   },
   {
     id: 4,
@@ -187,6 +267,7 @@ export const events = [
     organizer: 'Alumni Association',
     about: 'Seniors sharing tips on choosing the right career path after college.',
     registered: 150,
+    capacity: 500,
   },
 ];
 
@@ -209,12 +290,46 @@ export const mentorshipRequests = [
   { id: 2, from: 'Meena Iyer', fromRole: 'Student', status: 'Accepted' },
 ];
 
+// sample conversations for the messages page
+export const conversations = [
+  {
+    id: 1,
+    name: 'Rahul Kumar',
+    role: 'Frontend Developer',
+    last: 'Sure! Ask away.',
+    messages: [
+      { id: 1, sender: 'them', text: 'Hi! How can I help you?' },
+      { id: 2, sender: 'me', text: 'Hello Rahul, I need career advice.' },
+      { id: 3, sender: 'them', text: 'Sure! Ask away.' },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Priya Sharma',
+    role: 'Data Scientist',
+    last: 'Send me your resume',
+    messages: [
+      { id: 1, sender: 'me', text: 'Can you review my resume?' },
+      { id: 2, sender: 'them', text: 'Send me your resume' },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Arjun Nair',
+    role: 'Mechanical Engineer',
+    last: 'See you at the meetup!',
+    messages: [
+      { id: 1, sender: 'them', text: 'See you at the meetup!' },
+    ],
+  },
+];
+
 // notifications
 export const notifications = [
-  { id: 1, text: 'Priya Sharma accepted your connection request.', date: '2026-09-01' },
-  { id: 2, text: 'New job opportunity posted: Junior Data Analyst', date: '2026-08-25' },
-  { id: 3, text: 'You are registered for Resume Building Workshop', date: '2026-08-22' },
-  { id: 4, text: 'Ravi Kumar sent you a mentorship request.', date: '2026-08-18' },
+  { id: 1, type: 'connection', text: 'Priya Sharma accepted your connection request.', date: '2026-09-01' },
+  { id: 2, type: 'mentorship', text: 'Your mentorship request was accepted by Rahul Verma.', date: '2026-08-27' },
+  { id: 3, type: 'job', text: 'New Java Developer opportunity posted.', date: '2026-08-25' },
+  { id: 4, type: 'event', text: 'Alumni Networking Meetup starts in 2 days.', date: '2026-08-22' },
 ];
 
 // users for the admin panel
@@ -226,3 +341,27 @@ export const users = [
   { id: 5, name: 'Ravi Kumar', role: 'Student', status: 'Active' },
   { id: 6, name: 'Meena Iyer', role: 'Student', status: 'Active' },
 ];
+
+// admin activity + reports data
+export const adminActivity = [
+  { id: 1, text: 'New alumni registration: Divya Menon', time: '2 hours ago' },
+  { id: 2, text: 'New event created: Tech Talk AI in Industry', time: '5 hours ago' },
+  { id: 3, text: 'New job posted: Frontend Developer', time: '1 day ago' },
+  { id: 4, text: 'Ravi Kumar applied for Software Engineer Intern', time: '2 days ago' },
+];
+
+export const reportData = {
+  usersByRole: [
+    { role: 'Students', value: 450, color: '#2563EB' },
+    { role: 'Alumni', value: 280, color: '#7C3AED' },
+    { role: 'Admins', value: 8, color: '#16A34A' },
+  ],
+  requestsByMonth: [
+    { month: 'Mar', connections: 22, mentorship: 10 },
+    { month: 'Apr', connections: 30, mentorship: 15 },
+    { month: 'May', connections: 25, mentorship: 12 },
+    { month: 'Jun', connections: 40, mentorship: 20 },
+    { month: 'Jul', connections: 35, mentorship: 18 },
+    { month: 'Aug', connections: 48, mentorship: 26 },
+  ],
+};

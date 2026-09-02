@@ -7,7 +7,7 @@ export default function Footer() {
         <p className="mb-1">
           &copy; {new Date().getFullYear()} AlumniConnect. All rights reserved.
         </p>
-        <small className="text-muted">
+        <small className="muted">
           Connecting students and alumni of our college.
         </small>
       </div>

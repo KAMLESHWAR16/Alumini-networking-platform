@@ -16,9 +16,9 @@ export default function Profile() {
   const roleName = user?.role === 'alumni' ? 'Alumni' : 'Student';
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-1">My Profile</h2>
-      <p className="text-muted">
+    <div>
+      <h3 className="mb-1">My Profile</h3>
+      <p className="muted">
         Manage your {roleName.toLowerCase()} profile details.
       </p>
 

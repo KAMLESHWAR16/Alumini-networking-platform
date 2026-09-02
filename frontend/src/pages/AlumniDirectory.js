@@ -25,9 +25,9 @@ export default function AlumniDirectory() {
   });
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-1">Alumni Directory</h2>
-      <p className="text-muted">Find and connect with alumni from your college.</p>
+    <div>
+      <h3 className="mb-1">Alumni Directory</h3>
+      <p className="muted">Find and connect with alumni from your college.</p>
 
       {message && <div className="alert alert-success py-2">{message}</div>}
 
