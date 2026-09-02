@@ -1,0 +1,99 @@
+/* Global styles for AlumniConnect.
+   Hand written plain css on top of bootstrap. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* navbar */
+.app-navbar {
+  background-color: #2c3e50;
+}
+
+.app-navbar .nav-link {
+  color: #d5d8dc;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link.active {
+  color: #ffffff;
+}
+
+/* hero section on the home page */
+.hero-section {
+  background: linear-gradient(135deg, #1f4e79, #2e86c1);
+}
+
+.hero-text {
+  max-width: 640px;
+}
+
+/* avatar circle used on alumni cards */
+.avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #2e86c1;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* small skill tags */
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  background-color: #eaf2f8;
+  color: #1f4e79;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+/* centered auth forms */
+.auth-wrapper {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1f4e79, #2e86c1);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  border-radius: 8px;
+}
+
+/* footer */
+.app-footer {
+  background-color: #2c3e50;
+  color: #bdc3c7;
+}
+
+/* simple hover for event and alumni cards */
+.card {
+  transition: transform 0.15s ease;
+}
+
+.alumni-card:hover {
+  transform: translateY(-3px);
+}
