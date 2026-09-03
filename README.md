@@ -1,1 +1,1 @@
-# Alumini-networking-platform
+Capstone project 
