@@ -1,0 +1,28 @@
+# Java / Maven
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*
+!.env.example
+
+# Node / React
+frontend/node_modules/
+frontend/build/
+frontend/.cache/
+
+# Logs
+*.log

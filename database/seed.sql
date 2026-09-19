@@ -1,0 +1,2 @@
+-- Seed data will be added after the full schema and business modules are designed.
+-- This file is intentionally a placeholder at this phase.

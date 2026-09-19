@@ -1,0 +1,2 @@
+-- MySQL schema will be added after the backend foundation is validated.
+-- This file is intentionally a placeholder at this phase.
