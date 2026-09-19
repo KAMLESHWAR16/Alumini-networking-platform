@@ -6,7 +6,7 @@ import { departments, careerInterests } from '../data';
 
 // Two step registration: pick a role, then fill the profile.
 export default function Register() {
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [role, setRole] = useState('');
@@ -44,15 +44,25 @@ export default function Register() {
     setStep(2);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     if (!form.name || !form.email || !form.password) {
       setError('Please fill in all required fields.');
       return;
     }
-    // fake registration for now, backend will replace this later
-    login({ name: form.name, email: form.email, role });
-    navigate('/dashboard');
+
+    try {
+      const user = await register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: role.toUpperCase(),
+      });
+      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Unable to register. Please try again.');
+    }
   };
 
   return (

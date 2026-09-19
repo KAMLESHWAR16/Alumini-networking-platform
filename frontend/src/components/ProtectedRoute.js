@@ -13,7 +13,7 @@ export default function ProtectedRoute({ children, role }) {
   }
 
   // optional role check for admin only pages
-  if (role && user.role !== role) {
+  if (role && user.role !== role.toLowerCase()) {
     return <Navigate to="/" replace />;
   }
 

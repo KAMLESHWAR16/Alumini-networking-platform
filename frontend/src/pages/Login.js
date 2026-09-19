@@ -10,28 +10,21 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    // backend not ready, so demo login works with any input,
-    // and role is guessed from the email prefix.
     if (!email || !password) {
       setError('Please fill in all fields.');
       return;
     }
 
-    let role = 'student';
-    let name = 'Student User';
-    if (email.toLowerCase().includes('admin')) {
-      role = 'admin';
-      name = 'Admin User';
-    } else if (email.toLowerCase().includes('alumni')) {
-      role = 'alumni';
-      name = 'Alumni User';
+    try {
+      const user = await login({ email, password });
+      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Unable to login. Please check your credentials.');
     }
-
-    login({ name, email, role });
-    navigate(role === 'admin' ? '/admin' : '/dashboard');
   };
 
   return (

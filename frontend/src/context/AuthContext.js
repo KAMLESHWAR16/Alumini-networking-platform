@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../api/Axios';
 
 // Holds the logged in user. We keep it in localStorage so the
 // user stays logged in after refreshing the page. Simple and
@@ -9,14 +10,33 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      localStorage.removeItem('user');
+      return null;
+    }
   });
 
-  const login = (userData) => {
+  const storeSession = (authData) => {
+    const userData = {
+      ...authData.user,
+      role: authData.user.role.toLowerCase(),
+    };
     localStorage.setItem('user', JSON.stringify(userData));
-    // pretend there is a token for now
-    localStorage.setItem('token', 'demo-token');
+    localStorage.setItem('token', authData.token);
     setUser(userData);
+    return userData;
+  };
+
+  const login = async (credentials) => {
+    const response = await api.post('/v1/auth/login', credentials);
+    return storeSession(response.data.data);
+  };
+
+  const register = async (registration) => {
+    const response = await api.post('/v1/auth/register', registration);
+    return storeSession(response.data.data);
   };
 
   const logout = () => {
@@ -25,8 +45,18 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      setUser(null);
+    };
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
