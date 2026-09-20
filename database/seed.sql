@@ -1,49 +1,74 @@
 -- Seed data for the Alumni Networking Platform.
 -- Passwords below are bcrypt hashes of the literal "password".
--- Login hint: admin@alumni.example.com / password (and so on).
+-- Idempotent: existing rows are skipped (IGNORE / NOT EXISTS guards),
+-- so this file can be applied more than once safely.
 
-INSERT INTO users (id, name, email, password, role, enabled, created_at) VALUES
-  (1, 'Alice Admin',   'admin@alumni.example.com',   '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ADMIN',  1, NOW()),
-  (2, 'Bob Alumni',    'bob@alumni.example.com',     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ALUMNI',  1, NOW()),
-  (3, 'Carol Alumni',  'carol@alumni.example.com',   '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ALUMNI',  1, NOW()),
-  (4, 'Dan Student',   'dan@alumni.example.com',     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'STUDENT', 1, NOW()),
-  (5, 'Eve Student',   'eve@alumni.example.com',     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'STUDENT', 1, NOW());
+INSERT IGNORE INTO users (name, email, password, role, enabled, created_at) VALUES
+  ('Alice Admin',   'admin@alumni.example.com',   '$2a$10$Ez28EV17kuVveKvdV4PSqOIVUBb5JE8BRUzIiVmJhRYzcbTBjmhyK', 'ADMIN',  1, NOW()),
+  ('Bob Alumni',    'bob@alumni.example.com',     '$2a$10$Ez28EV17kuVveKvdV4PSqOIVUBb5JE8BRUzIiVmJhRYzcbTBjmhyK', 'ALUMNI',  1, NOW()),
+  ('Carol Alumni',  'carol@alumni.example.com',   '$2a$10$Ez28EV17kuVveKvdV4PSqOIVUBb5JE8BRUzIiVmJhRYzcbTBjmhyK', 'ALUMNI',  1, NOW()),
+  ('Dan Student',   'dan@alumni.example.com',     '$2a$10$Ez28EV17kuVveKvdV4PSqOIVUBb5JE8BRUzIiVmJhRYzcbTBjmhyK', 'STUDENT', 1, NOW()),
+  ('Eve Student',   'eve@alumni.example.com',     '$2a$10$Ez28EV17kuVveKvdV4PSqOIVUBb5JE8BRUzIiVmJhRYzcbTBjmhyK', 'STUDENT', 1, NOW());
 
-INSERT INTO profiles (id, user_id, headline, department, batch, current_company, current_role, location, verified, created_at, updated_at) VALUES
-  (1, 2, 'Senior Backend Engineer', 'CSE', 2015, 'Acme Corp', 'Staff Engineer', 'Bengaluru', 1, NOW(), NOW()),
-  (2, 3, 'Product Designer',        'Design', 2016, 'Bolt Labs', 'Principal Designer', 'Remote', 1, NOW(), NOW()),
-  (3, 4, 'Final Year Student',      'CSE', 2026, NULL, 'Student', 'Hyderabad', 0, NOW(), NOW()),
-  (4, 5, 'Aspiring Data Scientist', 'ECE', 2026, NULL, 'Student', 'Chennai', 0, NOW(), NOW());
+SET @alice = (SELECT id FROM users WHERE email = 'admin@alumni.example.com');
+SET @bob   = (SELECT id FROM users WHERE email = 'bob@alumni.example.com');
+SET @carol = (SELECT id FROM users WHERE email = 'carol@alumni.example.com');
+SET @dan   = (SELECT id FROM users WHERE email = 'dan@alumni.example.com');
+SET @eve   = (SELECT id FROM users WHERE email = 'eve@alumni.example.com');
 
-INSERT INTO profile_skills (profile_id, skill) VALUES
-  (1, 'Java'), (1, 'Spring Boot'), (1, 'SQL'),
-  (2, 'Figma'), (2, 'Design Systems'),
-  (4, 'Python'), (4, 'Machine Learning');
+INSERT IGNORE INTO profiles (user_id, headline, department, batch, current_company, current_role, location, verified, created_at, updated_at) VALUES
+  (@bob,   'Senior Backend Engineer', 'CSE',    2015, 'Acme Corp', 'Staff Engineer',   'Bengaluru', 1, NOW(), NOW()),
+  (@carol, 'Product Designer',        'Design', 2016, 'Bolt Labs', 'Principal Designer', 'Remote',   1, NOW(), NOW()),
+  (@dan,   'Final Year Student',      'CSE',    2026, NULL,        'Student',           'Hyderabad', 0, NOW(), NOW()),
+  (@eve,   'Aspiring Data Scientist', 'ECE',    2026, NULL,        'Student',           'Chennai',   0, NOW(), NOW());
 
-INSERT INTO connections (requester_id, addressee_id, status, message, created_at, responded_at) VALUES
-  (4, 2, 'ACCEPTED', NULL, NOW(), NOW()),
-  (5, 2, 'PENDING',  'Hi Bob, would love to connect!', NOW(), NULL);
+INSERT IGNORE INTO profile_skills (profile_id, skill) VALUES
+  ((SELECT id FROM profiles WHERE user_id = @bob), 'Java'),
+  ((SELECT id FROM profiles WHERE user_id = @bob), 'Spring Boot'),
+  ((SELECT id FROM profiles WHERE user_id = @bob), 'SQL'),
+  ((SELECT id FROM profiles WHERE user_id = @carol), 'Figma'),
+  ((SELECT id FROM profiles WHERE user_id = @carol), 'Design Systems'),
+  ((SELECT id FROM profiles WHERE user_id = @eve), 'Python'),
+  ((SELECT id FROM profiles WHERE user_id = @eve), 'Machine Learning');
 
-INSERT INTO mentorship_requests (student_id, mentor_id, message, status, created_at, responded_at) VALUES
-  (4, 2, 'Could you guide me on backend interviews?', 'PENDING', NOW(), NULL),
-  (5, 3, 'Interested in UX career path.',              'ACCEPTED', NOW(), NOW());
+INSERT IGNORE INTO connections (requester_id, addressee_id, status, created_at, responded_at) VALUES
+  (@dan, @bob, 'ACCEPTED', NOW(), NOW()),
+  (@eve, @bob, 'PENDING',  NOW(), NULL);
 
-INSERT INTO job_opportunities (id, title, company, location, type, experience, description, posted_by, active, created_at) VALUES
-  (1, 'Software Engineer', 'Acme Corp', 'Remote', 'FULL_TIME', '2+ years', 'Backend development with Spring Boot.', 2, 1, NOW()),
-  (2, 'UX Internship',     'Bolt Labs', 'Bengaluru', 'INTERNSHIP', NULL, 'Six month design internship.', 3, 1, NOW());
+INSERT IGNORE INTO mentorship_requests (student_id, mentor_id, message, status, created_at, responded_at) VALUES
+  (@dan, @bob,   'Could you guide me on backend interviews?', 'PENDING',  NOW(), NULL),
+  (@eve, @carol, 'Interested in UX career path.',             'ACCEPTED', NOW(), NOW());
 
-INSERT INTO opportunity_skills (opportunity_id, skill) VALUES
-  (1, 'Java'), (1, 'Spring Boot'), (1, 'SQL'),
-  (2, 'Figma');
+INSERT INTO job_opportunities (title, company, location, type, experience, description, posted_by, active, created_at)
+SELECT 'Software Engineer', 'Acme Corp', 'Remote',    'FULL_TIME', '2+ years', 'Backend development with Spring Boot.', @bob, 1, NOW()
+WHERE NOT EXISTS (SELECT 1 FROM job_opportunities WHERE title = 'Software Engineer' AND posted_by = @bob);
 
-INSERT INTO job_applications (job_id, applicant_id, status, created_at) VALUES
-  (1, 4, 'PENDING', NOW());
+INSERT INTO job_opportunities (title, company, location, type, experience, description, posted_by, active, created_at)
+SELECT 'UX Internship', 'Bolt Labs', 'Bengaluru', 'INTERNSHIP', NULL, 'Six month design internship.', @carol, 1, NOW()
+WHERE NOT EXISTS (SELECT 1 FROM job_opportunities WHERE title = 'UX Internship' AND posted_by = @carol);
 
-INSERT INTO events (id, title, description, location, type, starts_at, ends_at, capacity, online, meeting_url, organizer_id, created_at) VALUES
-  (1, 'Alumni Networking Night', 'Mix and mingle with alumni.', 'Campus Auditorium', 'HANGOUT', DATE_ADD(NOW(), INTERVAL 7 DAY), DATE_ADD(NOW(), INTERVAL 7 HOUR), 100, 0, NULL, 2, NOW()),
-  (2, 'Career Paths Webinar',    'Ex-alumni share career stories.', 'Online', 'WEBINAR', DATE_ADD(NOW(), INTERVAL 14 DAY), DATE_ADD(NOW(), INTERVAL 14 HOUR), 500, 1, 'https://meet.example.com/webinar', 3, NOW());
+SET @job_eng = (SELECT id FROM job_opportunities WHERE title = 'Software Engineer' AND posted_by = @bob);
+SET @job_ux  = (SELECT id FROM job_opportunities WHERE title = 'UX Internship' AND posted_by = @carol);
 
-INSERT INTO event_registrations (event_id, user_id, created_at) VALUES
-  (1, 4, NOW()),
-  (1, 5, NOW()),
-  (2, 4, NOW());
+INSERT IGNORE INTO opportunity_skills (opportunity_id, skill) VALUES
+  (@job_eng, 'Java'), (@job_eng, 'Spring Boot'), (@job_eng, 'SQL'),
+  (@job_ux, 'Figma');
+
+INSERT IGNORE INTO job_applications (job_id, applicant_id, status, created_at) VALUES
+  (@job_eng, @dan, 'PENDING', NOW());
+
+INSERT INTO events (title, description, location, type, starts_at, ends_at, capacity, online, meeting_url, organizer_id, created_at)
+SELECT 'Alumni Networking Night', 'Mix and mingle with alumni.', 'Campus Auditorium', 'HANGOUT',
+       DATE_ADD(NOW(), INTERVAL 7 DAY), DATE_ADD(NOW(), INTERVAL 7 HOUR), 100, 0, NULL, @bob, NOW()
+WHERE NOT EXISTS (SELECT 1 FROM events WHERE title = 'Alumni Networking Night');
+
+INSERT INTO events (title, description, location, type, starts_at, ends_at, capacity, online, meeting_url, organizer_id, created_at)
+SELECT 'Career Paths Webinar', 'Ex-alumni share career stories.', 'Online', 'WEBINAR',
+       DATE_ADD(NOW(), INTERVAL 14 DAY), DATE_ADD(NOW(), INTERVAL 14 HOUR), 500, 1, 'https://meet.example.com/webinar', @carol, NOW()
+WHERE NOT EXISTS (SELECT 1 FROM events WHERE title = 'Career Paths Webinar');
+
+SET @event_night = (SELECT id FROM events WHERE title = 'Alumni Networking Night');
+
+INSERT IGNORE INTO event_registrations (event_id, user_id, created_at) VALUES
+  (@event_night, @dan, NOW()),
+  (@event_night, @eve, NOW());

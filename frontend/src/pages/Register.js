@@ -51,6 +51,14 @@ export default function Register() {
       setError('Please fill in all required fields.');
       return;
     }
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters long.');
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(form.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
 
     try {
       const user = await register({
