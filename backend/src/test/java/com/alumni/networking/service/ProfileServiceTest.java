@@ -56,7 +56,11 @@ class ProfileServiceTest {
         User user = user(1L, Role.STUDENT);
         when(currentUserResolver.requireUser()).thenReturn(user);
         when(profileRepository.findByUserId(1L)).thenReturn(Optional.empty());
-        when(profileRepository.save(any(Profile.class))).thenReturn(new Profile());
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile saved = invocation.getArgument(0);
+            saved.setId(99L);
+            return saved;
+        });
 
         profileService.myProfile();
 

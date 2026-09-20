@@ -57,6 +57,7 @@ class MentorshipServiceTest {
         User student = user(1L, Role.STUDENT);
         User mentor = user(2L, Role.ALUMNI);
         when(currentUserResolver.requireUser()).thenReturn(student);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(student));
         when(userRepository.findById(2L)).thenReturn(Optional.of(mentor));
         when(mentorshipRequestRepository.findByPair(1L, 2L)).thenReturn(Optional.empty());
         MentorshipRequest saved = new MentorshipRequest();

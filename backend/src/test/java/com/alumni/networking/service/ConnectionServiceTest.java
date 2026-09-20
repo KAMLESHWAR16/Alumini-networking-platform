@@ -57,6 +57,7 @@ class ConnectionServiceTest {
         User me = user(1L, Role.STUDENT);
         User other = user(2L, Role.ALUMNI);
         when(currentUserResolver.requireUser()).thenReturn(me);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(me));
         when(userRepository.findById(2L)).thenReturn(Optional.of(other));
         when(connectionRepository.findByPair(1L, 2L)).thenReturn(Optional.empty());
         Connection saved = new Connection();
