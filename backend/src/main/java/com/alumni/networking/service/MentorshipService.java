@@ -6,6 +6,7 @@ import java.util.List;
 import com.alumni.networking.dto.MentorshipResponse;
 import com.alumni.networking.model.entity.MentorshipRequest;
 import com.alumni.networking.model.entity.MentorshipStatus;
+import com.alumni.networking.model.entity.NotificationType;
 import com.alumni.networking.model.entity.User;
 import com.alumni.networking.repository.MentorshipRequestRepository;
 import com.alumni.networking.repository.UserRepository;
@@ -18,15 +19,18 @@ public class MentorshipService {
     private final MentorshipRequestRepository mentorshipRequestRepository;
     private final UserRepository userRepository;
     private final CurrentUserResolver currentUserResolver;
+    private final NotificationService notificationService;
 
     public MentorshipService(
         MentorshipRequestRepository mentorshipRequestRepository,
         UserRepository userRepository,
-        CurrentUserResolver currentUserResolver
+        CurrentUserResolver currentUserResolver,
+        NotificationService notificationService
     ) {
         this.mentorshipRequestRepository = mentorshipRequestRepository;
         this.userRepository = userRepository;
         this.currentUserResolver = currentUserResolver;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -46,6 +50,8 @@ public class MentorshipService {
         request.setMentor(mentor);
         request.setMessage(message);
         MentorshipRequest saved = mentorshipRequestRepository.save(request);
+        notificationService.notify(mentor.getId(), NotificationType.MENTORSHIP_REQUEST,
+            student.getName() + " requested mentorship from you", null);
         return MentorshipResponse.fromMentor(saved.getId(), mentor, saved.getMessage(), saved.getStatus().name());
     }
 
@@ -62,6 +68,10 @@ public class MentorshipService {
         }
         request.setStatus(accept ? MentorshipStatus.ACCEPTED : MentorshipStatus.DECLINED);
         request.setRespondedAt(Instant.now());
+        if (accept) {
+            notificationService.notify(request.getStudent().getId(), NotificationType.MENTORSHIP_ACCEPTED,
+                request.getMentor().getName() + " accepted your mentorship request", null);
+        }
         return MentorshipResponse.fromStudent(request.getId(), request.getStudent(), request.getMessage(), request.getStatus().name());
     }
 

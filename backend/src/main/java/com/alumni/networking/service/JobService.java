@@ -8,6 +8,7 @@ import com.alumni.networking.dto.JobRequest;
 import com.alumni.networking.dto.JobResponse;
 import com.alumni.networking.model.entity.JobApplication;
 import com.alumni.networking.model.entity.JobOpportunity;
+import com.alumni.networking.model.entity.NotificationType;
 import com.alumni.networking.model.entity.Role;
 import com.alumni.networking.model.entity.User;
 import com.alumni.networking.repository.JobApplicationRepository;
@@ -23,17 +24,20 @@ public class JobService {
     private final JobApplicationRepository jobApplicationRepository;
     private final UserRepository userRepository;
     private final CurrentUserResolver currentUserResolver;
+    private final NotificationService notificationService;
 
     public JobService(
         JobOpportunityRepository jobOpportunityRepository,
         JobApplicationRepository jobApplicationRepository,
         UserRepository userRepository,
-        CurrentUserResolver currentUserResolver
+        CurrentUserResolver currentUserResolver,
+        NotificationService notificationService
     ) {
         this.jobOpportunityRepository = jobOpportunityRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.userRepository = userRepository;
         this.currentUserResolver = currentUserResolver;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -90,7 +94,10 @@ public class JobService {
         JobApplication application = new JobApplication();
         application.setJob(job);
         application.setApplicant(currentUser);
-        return JobApplicationResponse.from(jobApplicationRepository.save(application));
+        JobApplication saved = jobApplicationRepository.save(application);
+        notificationService.notify(job.getPostedBy().getId(), NotificationType.JOB_APPLICATION,
+            currentUser.getName() + " applied for " + job.getTitle() + " at " + job.getCompany(), null);
+        return JobApplicationResponse.from(saved);
     }
 
     @Transactional(readOnly = true)

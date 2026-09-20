@@ -7,6 +7,7 @@ import java.util.List;
 import com.alumni.networking.dto.ConnectionResponse;
 import com.alumni.networking.model.entity.Connection;
 import com.alumni.networking.model.entity.ConnectionStatus;
+import com.alumni.networking.model.entity.NotificationType;
 import com.alumni.networking.model.entity.User;
 import com.alumni.networking.repository.ConnectionRepository;
 import com.alumni.networking.repository.UserRepository;
@@ -19,15 +20,18 @@ public class ConnectionService {
     private final ConnectionRepository connectionRepository;
     private final UserRepository userRepository;
     private final CurrentUserResolver currentUserResolver;
+    private final NotificationService notificationService;
 
     public ConnectionService(
         ConnectionRepository connectionRepository,
         UserRepository userRepository,
-        CurrentUserResolver currentUserResolver
+        CurrentUserResolver currentUserResolver,
+        NotificationService notificationService
     ) {
         this.connectionRepository = connectionRepository;
         this.userRepository = userRepository;
         this.currentUserResolver = currentUserResolver;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -47,6 +51,8 @@ public class ConnectionService {
         connection.setAddressee(other);
         connection.setStatus(ConnectionStatus.PENDING);
         Connection saved = connectionRepository.save(connection);
+        notificationService.notify(other.getId(), NotificationType.CONNECTION_REQUEST,
+            currentUser.getName() + " sent you a connection request", null);
         return ConnectionResponse.fromRequest(saved.getId(), other, saved.getStatus().name());
     }
 
@@ -55,6 +61,8 @@ public class ConnectionService {
         Connection connection = ownIncoming(connectionId);
         connection.setStatus(ConnectionStatus.ACCEPTED);
         connection.setRespondedAt(Instant.now());
+        notificationService.notify(connection.getRequester().getId(), NotificationType.CONNECTION_ACCEPTED,
+            connection.getAddressee().getName() + " accepted your connection request", null);
         return ConnectionResponse.fromAddress(connection.getId(), connection.getRequester(), connection.getStatus().name());
     }
 
